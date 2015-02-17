@@ -2,7 +2,7 @@ import unittest
 import os
 import B_URL_UPLOAD
 
-os.environ['DATABASE_URL'] = 'sqlite:////tmp/test.db'
+#os.environ['DATABASE_URL'] = 'sqlite:////tmp/test.db'
 
 class HomeTestCase(unittest.TestCase):
 
@@ -13,16 +13,16 @@ class HomeTestCase(unittest.TestCase):
 
 
     def test_ut_validate_url(self):
-        url = "http://www.google.com"
+        url = "www.google.com"
         isValid = B_URL_UPLOAD.validate( url )    	
         self.assertTrue( isValid)
     	
 
 
-    #def ut_test_invalid_url(self):
-    	#call method under test with valid url parameter
-    	
-    	#assert that url is validated successfully
+    def test_ut_invalid_url(self):
+        url = "www/google.com"
+        isValid = B_URL_UPLOAD.validate( url )      
+        self.assertFalse( isValid)
 
 
 
@@ -33,6 +33,7 @@ class HomeTestCase(unittest.TestCase):
     	
     	#assert that data loaded into url table 
         #self.assertEqual( , )
+
 
 if __name__ == '__main__':
     unittest.main()
