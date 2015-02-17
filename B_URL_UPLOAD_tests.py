@@ -1,6 +1,7 @@
 import unittest
 import os
 import B_URL_UPLOAD
+import sqlalchemy
 
 #os.environ['DATABASE_URL'] = 'sqlite:////tmp/test.db'
 
