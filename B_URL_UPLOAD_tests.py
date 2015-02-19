@@ -2,13 +2,44 @@ import unittest
 import os
 import B_URL_UPLOAD
 import sqlalchemy
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, String
 
-#os.environ['DATABASE_URL'] = 'sqlite:////tmp/test.db'
+
+engine = create_engine('sqlite:///:memory:', echo=True)
+Model = declarative_base()
+
+
+
+class UrlExtModel(Model):
+    __tablename__ = 'url_ext'
+    id = Column(Integer, primary_key=True)
+    url = Column(String(1000))
+    
+    def __init__(self, url):
+        self.url = url
+    
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+
+           "url" : self.url
+
+       }    
+
 
 class HomeTestCase(unittest.TestCase):
 
-#    def setUp(self):
-        
+    def setUp(self):
+        Model.metadata.create_all(engine)
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        google_url = UrlExtModel(url='www.google.com')
+        session.add(google_url)
+    
 
 #    def tearDown(self):
 
