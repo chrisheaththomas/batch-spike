@@ -40,7 +40,7 @@ class HomeTestCase(unittest.TestCase):
         google_url1 = UrlExtModel(url='www.google.com')
         session.add(google_url1)
         
-        google_url2 = UrlExtModel(url='www.google.com')
+        google_url2 = UrlExtModel(url='www/google.com')
         session.add(google_url2)
 
     
