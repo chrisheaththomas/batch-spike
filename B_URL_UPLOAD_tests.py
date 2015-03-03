@@ -2,22 +2,22 @@ import unittest
 import os
 import B_URL_UPLOAD
 import sqlalchemy
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.exc import MultipleResultsFound
+from B_URL_UPLOAD import Model
 
 engine = create_engine('sqlite:///:memory:', echo=True)
-Model = declarative_base()
 Model.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
 
+
 class UrlExtModel(Model):
-    __tablename__ = 'url_ext'
+    __tablename__ = 'URL_EXT'
     id = Column(Integer, primary_key=True)
     url = Column(String(1000))
     
@@ -42,11 +42,10 @@ class HomeTestCase(unittest.TestCase):
         
         google_url2 = UrlExtModel(url='www/google.com')
         session.add(google_url2)
-
+        session.commit()
     
 
-    def tearDown(self):
-        #TODO truncate tables    
+    def tearDown(self):   
         session.close()
 
 
@@ -65,11 +64,9 @@ class HomeTestCase(unittest.TestCase):
 
 
 
-    def test_it_load_data(self):
-    	
+    def test_it_load_data(self):    	
     	try:
-            B_URL_UPLOAD.load()
-
+            B_URL_UPLOAD.load( session )
             instance = session.query(UrlModel).one()
             self.assertEqual( "www.google.com", instance.url)
 
@@ -77,8 +74,6 @@ class HomeTestCase(unittest.TestCase):
             assert "One record expected. More than one found"
         except NoResultFound, e:
             assert "One record expected. No record found"
-
- 
         except:
             self.fail("Unexpected exception in load()")
 
@@ -87,10 +82,4 @@ class HomeTestCase(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
-    #def integration_test_reject_data(self):
-    	#setup: load test data into tmp_ext table with invalid url field
-    	
-    	#call validation method under test
-    	
-    	#assert that data not loaded into url table 
         
