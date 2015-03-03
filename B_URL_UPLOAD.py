@@ -27,6 +27,25 @@ class UrlModel(Model):
 
 
 
+class UrlExtModel(Model):
+    __tablename__ = 'URL_EXT'
+    id = Column(Integer, primary_key=True)
+    url = Column(String(1000))
+    
+    def __init__(self, url):
+        self.url = url
+    
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+
+           "url" : self.url
+
+       }    
+
+
+
 def validate( url ):
     p = re.compile('^[a-zA-Z0-9\-\.]+\.(com|org|net|mil|edu|COM|ORG|NET|MIL|EDU)[a-zA-Z0-9\-\./]*$')
     m = p.match(url)
