@@ -10,7 +10,9 @@ from sqlalchemy import Column, Integer, String
 
 engine = create_engine('sqlite:///:memory:', echo=True)
 Model = declarative_base()
-
+Model.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
 class UrlExtModel(Model):
@@ -34,14 +36,17 @@ class UrlExtModel(Model):
 class HomeTestCase(unittest.TestCase):
 
     def setUp(self):
-        Model.metadata.create_all(engine)
-        Session = sessionmaker(bind=engine)
-        session = Session()
-        google_url = UrlExtModel(url='www.google.com')
-        session.add(google_url)
+        google_url1 = UrlExtModel(url='www.google.com')
+        session.add(google_url1)
+        
+        google_url2 = UrlExtModel(url='www.google.com')
+        session.add(google_url2)
+
     
 
-#    def tearDown(self):
+    def tearDown(self):
+        session.close()
+
 
 
     def test_ut_validate_url(self):
@@ -62,8 +67,12 @@ class HomeTestCase(unittest.TestCase):
     	#setup: load test data into tmp_ext table with valid url field
     	
     	#call validation method under test
-    	
-    	#assert that data loaded into url table 
+    	#try:
+        #    B_URL_UPLOAD.load()
+        #except:
+
+
+            	#assert that data loaded into url table 
         #self.assertEqual( , )
 
 
