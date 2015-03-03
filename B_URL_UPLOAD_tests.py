@@ -6,7 +6,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String
-
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import MultipleResultsFound
 
 engine = create_engine('sqlite:///:memory:', echo=True)
 Model = declarative_base()
@@ -45,6 +46,7 @@ class HomeTestCase(unittest.TestCase):
     
 
     def tearDown(self):
+        #TODO truncate tables    
         session.close()
 
 
@@ -63,17 +65,23 @@ class HomeTestCase(unittest.TestCase):
 
 
 
-    #def integration_test_load_data(self):
-    	#setup: load test data into tmp_ext table with valid url field
+    def test_it_load_data(self):
     	
-    	#call validation method under test
-    	#try:
-        #    B_URL_UPLOAD.load()
-        #except:
+    	try:
+            B_URL_UPLOAD.load()
 
+            instance = session.query(UrlModel).one()
+            self.assertEqual( "www.google.com", instance.url)
 
-            	#assert that data loaded into url table 
-        #self.assertEqual( , )
+        except MultipleResultsFound, e:
+            assert "One record expected. More than one found"
+        except NoResultFound, e:
+            assert "One record expected. No record found"
+
+ 
+        except:
+            self.fail("Unexpected exception in load()")
+
 
 
 if __name__ == '__main__':
