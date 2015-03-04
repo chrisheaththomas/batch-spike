@@ -17,8 +17,6 @@ session = Session()
 
 
 
-
-
 class HomeTestCase(unittest.TestCase):
 
     def setUp(self):

@@ -67,6 +67,9 @@ def load(session):
     session.commit()        
 
 
-#if __name__ == '__main__':
-    #TODO initialise DB session
+if __name__ == '__main__':
+    engine = create_engine('oracle+cx_oracle://user:pass@host:port/dbname', echo=True)    
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    load(session)
 
